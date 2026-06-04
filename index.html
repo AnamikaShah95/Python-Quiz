@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Quiz Challenge</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #306998 0%, #2b5b84 100%);
+            --accent-color: #ffd43b;
+            --accent-gradient: linear-gradient(135deg, #ffd43b 0%, #ffe873 100%);
+            --background-gradient: linear-gradient(135deg, #eef2f7 0%, #dfe6e9 100%);
+            --card-color: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-gradient);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background-color: var(--card-color);
+            border-radius: 20px;
+            box-shadow: 0 12px 32px rgba(48, 105, 152, 0.15);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px 35px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #306998 50%, #ffd43b 50%);
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .welcome-logo {
+            font-size: 70px;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1.title {
+            font-size: 32px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .welcome-text {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(48, 105, 152, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(48, 105, 152, 0.45);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 18px;
+            margin-bottom: 25px;
+        }
+
+        .progress-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #306998;
+        }
+
+        .score-badge {
+            background: var(--accent-gradient);
+            color: #2c3e50;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(255, 212, 59, 0.2);
+        }
+
+        .question-box {
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .points-text {
+            font-size: 13px;
+            color: #306998;
+            font-weight: 600;
+            background-color: rgba(48, 105, 152, 0.08);
+            padding: 3px 10px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option-btn {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 22px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .option-btn:hover {
+            border-color: #306998;
+            background-color: rgba(48, 105, 152, 0.03);
+            transform: translateX(4px);
+        }
+
+        .correct {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
+            color: white !important;
+            border-color: #27ae60 !important;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .incorrect {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+            color: white !important;
+            border-color: #c0392b !important;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .feedback-message {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            min-height: 27px;
+        }
+
+        .feedback-message.success { color: #2ecc71; }
+        .feedback-message.fail { color: var(--error-color); }
+
+        .next-btn {
+            display: block;
+            width: 100%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(48, 105, 152, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .results-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .results-screen h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .restart-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 35px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(48, 105, 152, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-logo">🐍</div>
+        <h1 class="title">Let's Play a Python Quiz!</h1>
+        <p class="welcome-text">
+            Test your programming knowledge across 15 technical challenges.<br>
+            <strong>Warning:</strong> Sudden Death Rules apply! One wrong answer triggers an immediate Game Over.
+        </p>
+        <button class="start-btn" onclick="startQuiz()">Start Challenge</button>
+    </div>
+
+    <div id="quiz-screen" class="hidden">
+        <header>
+            <div class="progress-text" id="progress">Question 1/15</div>
+            <div class="score-badge">Score: <span id="score">0</span> pts</div>
+        </header>
+
+        <div class="question-box">
+            <div class="question-text" id="question-text">Loading...</div>
+            <div class="points-text" id="points-text">1 point</div>
+        </div>
+
+        <div class="options-container" id="options-container">
+            <button class="option-btn" onclick="submitAnswer(1)">Option A</button>
+            <button class="option-btn" onclick="submitAnswer(2)">Option B</button>
+            <button class="option-btn" onclick="submitAnswer(3)">Option C</button>
+            <button class="option-btn" onclick="submitAnswer(4)">Option D</button>
+        </div>
+
+        <div class="feedback-message" id="feedback"></div>
+        <button id="next-btn" class="next-btn hidden" onclick="nextQuestion()">Next Question ➡️</button>
+    </div>
+
+    <div id="end-screen" class="hidden results-screen">
+        <h2 id="end-title">Game Over</h2>
+        <p id="end-message" style="color: var(--text-muted); font-size: 16px;"></p>
+        <h3 style="font-size: 22px; margin: 25px 0;">Final Score: <span id="final-score" style="color: #306998;">0</span> Points</h3>
+        <button class="restart-btn" onclick="restartQuiz()">🔄 Try Again</button>
+    </div>
+
+</div>
+
+<script>
+    const questions = [
+        ["Which function is used to display output in Python?", "echo()", "print()", "display()", "show()", 2],
+        ["What is the correct way to start a comment in Python?", "#", "//", "/*", "--", 1],
+        ["Which of the following is NOT a Python data type?", "int", "float", "real", "str", 3],
+        ["What is the output of len('Python')?", "5", "6", "7", "Error", 2],
+        ["Which keyword is used to create a loop in Python?", "repeat", "loop", "for", "iterate", 3],
+        ["Which of the following is used to import a module in Python?", "include", "import", "require", "using", 2],
+        ["What is the output of bool(0)?", "True", "False", "0", "Error", 2],
+        ["Which method is used to add an element to a list?", "append()", "add()", "insert()", "push()", 1],
+        ["What is the output of 'Python'.lower()?", "PYTHON", "python", "Python", "error", 2],
+        ["Which of the following is used to handle exceptions?", "catch-finally", "try-except", "error-check", "if-else", 2],
+        ["Which of the following creates a generator in Python?", "[]", "{}", "()", "yield", 4],
+        ["What is the output of sum([i for i in range(5)])?", "10", "15", "5", "Error", 1],
+        ["Which of the following is true about Python dictionaries?", "They are ordered", "They allow duplicate keys", "They store key-value pairs", "They are immutable", 3],
+        ["Which of the following is used to define a class?", "function", "class", "def", "object", 2],
+        ["What is the output of type((1,))?", "list", "tuple", "int", "dict", 2]
+    ];
+
+    const points = [1,1,1,1,1,2,2,2,2,2,4,4,4,4,4];
+    
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+
+    // Screens
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const endScreen = document.getElementById('end-screen');
+    
+    // Elements
+    const progressEl = document.getElementById('progress');
+    const scoreEl = document.getElementById('score');
+    const questionTextEl = document.getElementById('question-text');
+    const pointsTextEl = document.getElementById('points-text');
+    const optionsContainer = document.getElementById('options-container');
+    const feedbackEl = document.getElementById('feedback');
+    const nextBtn = document.getElementById('next-btn');
+
+    function startQuiz() {
+        welcomeScreen.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        answered = false;
+        feedbackEl.textContent = "";
+        feedbackEl.className = "feedback-message";
+        nextBtn.classList.add('hidden');
+        
+        let q = questions[currentIdx];
+        progressEl.textContent = `Question ${currentIdx + 1}/${questions.length}`;
+        questionTextEl.textContent = q[0];
+        pointsTextEl.textContent = `+ ${points[currentIdx]} ${points[currentIdx] === 1 ? 'Point' : 'Points'}`;
+
+        const buttons = optionsContainer.children;
+        for(let i = 0; i < 4; i++) {
+            buttons[i].textContent = `${String.fromCharCode(97 + i)}. ${q[i+1]}`;
+            buttons[i].className = "option-btn"; 
+            buttons[i].disabled = false;
+        }
+    }
+
+    function submitAnswer(selectedOption) {
+        if (answered) return;
+        answered = true;
+
+        let q = questions[currentIdx];
+        let correctOption = q[5];
+        const buttons = optionsContainer.children;
+
+        for(let i=0; i<4; i++) {
+            buttons[i].disabled = true;
+        }
+
+        if (selectedOption === correctOption) {
+            buttons[selectedOption - 1].classList.add('correct');
+            feedbackEl.textContent = "Correct Answer! 🎉";
+            feedbackEl.className = "feedback-message success";
+            score += points[currentIdx];
+            scoreEl.textContent = score;
+            
+            nextBtn.classList.remove('hidden');
+        } else {
+            buttons[selectedOption - 1].classList.add('incorrect');
+            buttons[correctOption - 1].classList.add('correct');
+            feedbackEl.textContent = `Incorrect! The correct option was ${String.fromCharCode(96 + correctOption)}.`;
+            feedbackEl.className = "feedback-message fail";
+            
+            setTimeout(() => {
+                endGame(false);
+            }, 1800);
+        }
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            loadQuestion();
+        } else {
+            endGame(true); 
+        }
+    }
+
+    function endGame(completedAll) {
+        quizScreen.classList.add('hidden');
+        endScreen.classList.remove('hidden');
+        document.getElementById('final-score').textContent = score;
+
+        const endTitle = document.getElementById('end-title');
+        const endMessage = document.getElementById('end-message');
+
+        if (completedAll) {
+            endTitle.innerHTML = "Flawless Victory! 🏆";
+            endMessage.textContent = "Outstanding! You conquered all 15 questions perfectly.";
+        } else {
+            endTitle.innerHTML = "Game Over 💀";
+            endMessage.textContent = "Better luck next time! Remember, precision is key in Python.";
+        }
+    }
+
+    function restartQuiz() {
+        currentIdx = 0;
+        score = 0;
+        scoreEl.textContent = "0";
+        endScreen.classList.add('hidden');
+        welcomeScreen.classList.remove('hidden');
+    }
+</script>
+</body>
+</html>
+
+```
