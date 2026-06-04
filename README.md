@@ -2,7 +2,7 @@
 <p align="center"><img src="https://readme-typing-svg.demolab.com?font=Segoe+UI&weight=800&size=36&duration=3000&pause=1000&color=8E44AD&center=true&vCenter=true&width=600&lines=Python+Quiz+Challenge;Sudden+Death+Rules!+%E2%9A%A0%EF%B8%8F" alt="Typing SVG" /></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Language-Python%20%7C%20HTML%20%7C%20JS-blue?style=for-the-badge" alt="Languages">
+  <img src="https://img.shields.io/badge/Language-Python%20%7C%20-blue?style=for-the-badge" alt="Languages">
   <img src="https://img.shields.io/badge/Rules-Sudden%20Death-red?style=for-the-badge" alt="Sudden Death">
   <img src="https://img.shields.io/badge/Total%20Questions-15-purple?style=for-the-badge" alt="Questions">
 </p>
@@ -33,6 +33,7 @@ Python Quiz Challenge ek interactive aur high-stakes technical assessment applic
 ## 🛠️ Project Structure
 
 ├── index.html        # Modern frontend application (HTML5, CSS3 Variables, ES6 JavaScript)
+
 └── PythonQuiz.py     # Terminal-based interactive script (Python 3.x)
 
 ---
