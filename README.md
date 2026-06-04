@@ -1,6 +1,4 @@
-# Python Quiz Challenge - README
 
-# Title (Copy and paste this snippet as-is for the Purple Typing Animation Header)
 <p align="center"><img src="https://readme-typing-svg.demolab.com?font=Segoe+UI&weight=800&size=36&duration=3000&pause=1000&color=8E44AD&center=true&vCenter=true&width=600&lines=Python+Quiz+Challenge;Sudden+Death+Rules!+%E2%9A%A0%EF%B8%8F" alt="Typing SVG" /></p>
 
 <p align="center">
@@ -42,9 +40,9 @@ Python Quiz Challenge ek interactive aur high-stakes technical assessment applic
 ### 1. Web UI Version (Browser)
 * Open index.html directly in your browser or run:
   
-  # macOS
+  ### macOS
   open index.html
-  # Windows
+  #### Windows
   start index.html
   
 * Click Start Challenge to begin[cite: 1].
